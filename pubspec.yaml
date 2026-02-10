@@ -1,0 +1,39 @@
+name: flutersukabliat
+description: "app ban noi that"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  firebase_core: ^4.3.0
+  cloud_firestore: ^6.1.1
+  firebase_auth: ^6.1.3
+  provider: ^6.1.1
+  firebase_database: ^12.1.0
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_native_splash: ^2.4.0
+
+# CẤU HÌNH NATIVE SPLASH (SỬ DỤNG LOGO1.PNG)
+flutter_native_splash:
+  color: "#1A1410"
+  image: assets/images/logo1.png
+  android_12:
+    color: "#1A1410"
+    icon_background_color: "#1A1410"
+    image: assets/images/logo1.png
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

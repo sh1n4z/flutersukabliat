@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "535106210480",
+    "project_id": "android-db188",
+    "storage_bucket": "android-db188.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535106210480:android:51b24b9bcd852365a18975",
+        "android_client_info": {
+          "package_name": "com.example.flutersukabliat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfNMRCnKL8Q9RUgxnS10mYF0_69aNw3dM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535106210480:android:5b66459e713a46aca18975",
+        "android_client_info": {
+          "package_name": "com.example.quanlynoithat_doanhk1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfNMRCnKL8Q9RUgxnS10mYF0_69aNw3dM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
