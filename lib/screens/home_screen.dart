@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {'icon': Icons.restaurant_rounded, 'label': 'Dining'},
     {'icon': Icons.work_rounded, 'label': 'Office'},
     {'icon': Icons.lightbulb_outline, 'label': 'Decor'},
+
   ];
 
   @override
