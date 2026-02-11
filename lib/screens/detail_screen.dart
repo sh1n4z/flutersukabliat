@@ -242,7 +242,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                   child: TabBarView(
                     controller: _tabController,
                     children: [
-                      Padding(padding: const EdgeInsets.all(20), child: Text(product.description, style: const TextStyle(color: Colors.grey, height: 1.6))),
+                      Padding(padding: const EdgeInsets.all(20), child: Text(product.description, style: const TextStyle(color: AppColors.woodAccent, height: 1.6))),
                       Padding(padding: const EdgeInsets.all(20), child: Column(children: [_buildSpecRow("Chất liệu", "Gỗ Sồi nguyên khối"), _buildSpecRow("Hoàn thiện", "Dầu tự nhiên"), _buildSpecRow("Xuất xứ", "Ebony VN")])),
                     ],
                   ),
