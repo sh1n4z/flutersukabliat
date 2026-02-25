@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../utils/snackbar_helper.dart';
 import '../services/auth_service.dart';
 import '../models/address_model.dart';
 import '../theme/app_colors.dart';
@@ -70,7 +71,13 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
       if (mounted) Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Lỗi: $e")));
+      showAppSnackBar(
+        context,
+        SnackBar(
+          content: Text('Lỗi lưu địa chỉ: $e'),
+          backgroundColor: AppColors.error,
+        ),
+      );
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }

@@ -4,6 +4,7 @@ import '../models/product.dart';
 import '../theme/app_colors.dart';
 import '../providers/cart_provider.dart';
 import '../providers/favorite_provider.dart';
+import '../utils/snackbar_helper.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -129,14 +130,14 @@ class ProductCard extends StatelessWidget {
                   customBorder: const CircleBorder(),
                   onTap: () {
                     // Gọi FavoriteProvider để xử lý logic thả tim
+                    final wasFav = favorite.isFavorite(product.id);
                     favorite.toggleFavorite(product);
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(isFav ? "Đã bỏ yêu thích" : "Đã thêm vào yêu thích!"),
-                        duration: const Duration(seconds: 1),
-                      ),
-                    );
+                    if (!wasFav) {
+                      showAppSnackBar(context, const SnackBar(content: Text('Đã thêm vào yêu thích')));
+                    } else {
+                      showAppSnackBar(context, const SnackBar(content: Text('Đã bỏ yêu thích')));
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(6),
@@ -162,12 +163,7 @@ class ProductCard extends StatelessWidget {
                   onTap: () {
                     cart.add(product);
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Đã thêm vào giỏ hàng!"),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
+                      showAppSnackBar(context, const SnackBar(content: Text("Đã thêm vào giỏ hàng!")));
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(8),

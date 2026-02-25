@@ -8,8 +8,10 @@ import '../services/auth_service.dart';
 import 'order_history_screen.dart';
 import 'account_info_screen.dart' hide AppColors;
 import 'address_list_screen.dart';
-import 'favorite_screen.dart';
-import 'cart_screen.dart';
+import 'favorite/favorite_screen.dart';
+import 'cart/cart_screen.dart';
+import 'admin_login_screen.dart';
+import 'payment_methods_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -84,6 +86,13 @@ class ProfileScreen extends StatelessWidget {
                           'Đơn hàng đã mua',
                           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const OrderHistoryScreen())),
                         ),
+                        _buildDivider(),
+                        _buildMenuItem(
+                          context,
+                          Icons.payment,
+                          'Phương thức thanh toán',
+                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PaymentMethodsScreen())),
+                        ),
                       ]),
                       
                       const SizedBox(height: 32),
@@ -95,6 +104,13 @@ class ProfileScreen extends StatelessWidget {
                         _buildMenuItem(context, Icons.headset_mic_outlined, 'Tổng đài chăm sóc'),
                         _buildDivider(),
                         _buildMenuItem(context, Icons.info_outline_rounded, 'Về Ebony Furniture'),
+                        _buildDivider(),
+                        _buildMenuItem(
+                          context,
+                          Icons.admin_panel_settings,
+                          'Admin Panel',
+                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminLoginScreen())),
+                        ),
                       ]),
                       
                       const SizedBox(height: 48),
