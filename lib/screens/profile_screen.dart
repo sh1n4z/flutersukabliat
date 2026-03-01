@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../theme/app_colors.dart';
+import '../theme/app_colors.dart';
 import '../providers/cart_provider.dart';
 import '../providers/favorite_provider.dart';
 import '../services/auth_service.dart';
-import 'order_history_screen.dart';
-import 'account_info_screen.dart' hide AppColors;
-import 'address_list_screen.dart';
+import 'order/order_history_screen.dart';
+import 'profile/account_info_screen.dart' hide AppColors;
+import 'address/address_list_screen.dart';
 import 'favorite/favorite_screen.dart';
 import 'cart/cart_screen.dart';
-import 'admin_login_screen.dart';
-import 'payment_methods_screen.dart';
+import 'admin/admin_login_screen.dart';
+import 'payment/payment_methods_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

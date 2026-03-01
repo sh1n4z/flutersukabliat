@@ -1,6 +1,7 @@
 import 'package:flutersukabliat/providers/cart_provider.dart';
 import 'package:flutersukabliat/providers/favorite_provider.dart';
 import 'package:flutersukabliat/providers/product_provider.dart';
+import 'package:flutersukabliat/providers/voucher_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +10,7 @@ import 'firebase_options.dart';
 import 'screens/splash/splash_screen.dart';
 import 'screens/main_screen.dart';
 import 'screens/auth/login_screen.dart';
+import 'screens/admin/admin_dashboard_screen.dart';
 import 'theme/app_theme.dart';
 import 'services/auth_service.dart';
 import 'utils/snackbar_helper.dart';
@@ -25,6 +27,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => VoucherProvider()),
       ],
       child: const MyApp(),
     ),
@@ -60,13 +63,18 @@ class _InitializerState extends State<Initializer> {
   Widget build(BuildContext context) {
     // 1. Hiển thị SplashScreen đầu tiên khi bật app
     if (_showSplash) {
-      return const SplashScreen();
+      return SplashScreen(
+        onFinish: () {
+          setState(() {
+            _showSplash = false;
+          });
+        },
+      );
     }
 
     // 2. Sau khi Splash kết thúc, Listen Firebase Auth State Changes
-    // Nếu có User (Firebase) -> Vào MainScreen (Home)
-    // Nếu không -> Vào LoginScreen
-    // ✅ Dùng StreamBuilder để auto rebuild khi auth state thay đổi
+    // Nếu có User (Firebase) -> Kiểm tra role: admin -> AdminDashboardScreen, customer -> MainScreen
+    // Nếu không -> LoginScreen
     return StreamBuilder<User?>(
       stream: _auth.authStateChanges,
       builder: (context, snapshot) {
@@ -93,9 +101,43 @@ class _InitializerState extends State<Initializer> {
           );
         }
 
-        // ✅ Nếu có User -> MainScreen
+        // ✅ Nếu có User -> Kiểm tra role từ Firestore
         if (snapshot.hasData && snapshot.data != null) {
-          return const MainScreen();
+          return FutureBuilder<String?>(
+            future: _auth.getUserRole(snapshot.data!.uid),
+            builder: (context, roleSnapshot) {
+              // Đang tải role
+              if (roleSnapshot.connectionState == ConnectionState.waiting) {
+                return Scaffold(
+                  backgroundColor: Colors.white,
+                  body: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/logo1.png',
+                          width: 100,
+                          errorBuilder: (c, e, s) => const Icon(Icons.chair, size: 100),
+                        ),
+                        const SizedBox(height: 24),
+                        const CircularProgressIndicator(color: Color(0xFFA88860)),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              final role = roleSnapshot.data ?? 'customer';
+
+              // Nếu admin -> AdminDashboardScreen
+              if (role == 'admin') {
+                return const AdminDashboardScreen();
+              }
+
+              // Nếu customer hoặc không có role -> MainScreen
+              return const MainScreen();
+            },
+          );
         }
 
         // ❌ Nếu không có User -> LoginScreen

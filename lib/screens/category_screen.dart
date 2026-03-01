@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/product.dart';
 import '../widgets/product_card.dart';
-import 'detail_screen.dart';
+import 'product/detail_screen.dart';
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
@@ -24,7 +24,10 @@ class CategoryScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('products').snapshots(),
+        stream: FirebaseFirestore.instance
+    .collection('products') // Vẫn giữ nguyên products có chữ s
+    .where('category', isEqualTo: widget.category) // Gọi đúng biến category
+    .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return const Center(child: Text("Lỗi kết nối", style: TextStyle(color: Colors.white)));
           if (snapshot.connectionState == ConnectionState.waiting) {

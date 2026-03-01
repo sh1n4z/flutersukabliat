@@ -5,6 +5,8 @@ class Product {
   final double price;
   final List<String> images; // Đã đổi từ 1 ảnh sang List ảnh
   final String category;
+  final List<dynamic> colors; // Danh sách màu sắc từ Firebase
+  final List<dynamic> sizes; // Danh sách kích cỡ từ Firebase
 
   Product({
     required this.id,
@@ -13,6 +15,8 @@ class Product {
     required this.price,
     required this.images,
     required this.category,
+    this.colors = const [],
+    this.sizes = const [],
   });
 
   // Giúp lấy nhanh 1 tấm ảnh đại diện
@@ -26,6 +30,18 @@ class Product {
       imgs = [m['imageUrl'].toString()];
     }
 
+    // Parse colors một cách an toàn
+    List<dynamic> colors = [];
+    if (m['colors'] != null && m['colors'] is List) {
+      colors = List<dynamic>.from(m['colors']);
+    }
+
+    // Parse sizes một cách an toàn
+    List<dynamic> sizes = [];
+    if (m['sizes'] != null && m['sizes'] is List) {
+      sizes = List<dynamic>.from(m['sizes']);
+    }
+
     return Product(
       id: id,
       title: m['title']?.toString() ?? m['name']?.toString() ?? '',
@@ -33,6 +49,8 @@ class Product {
       price: (m['price'] ?? 0).toDouble(),
       category: m['category']?.toString() ?? '',
       images: imgs,
+      colors: colors,
+      sizes: sizes,
     );
   }
 
@@ -42,5 +60,7 @@ class Product {
     'price': price,
     'images': images,
     'category': category,
+    'colors': colors,
+    'sizes': sizes,
   };
 }
