@@ -17,10 +17,13 @@ import 'utils/snackbar_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Khởi tạo thời gian bắt đầu app để dùng cho SnackBar helper
   AppGlobals.appStart = DateTime.now();
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
   runApp(
     MultiProvider(
       providers: [
@@ -42,8 +45,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Ebony Furniture',
-      theme: AppTheme.ebonyTheme, // Đảm bảo sử dụng theme Luxury của Ebony
-      home: const Initializer(), // Startup screen bắt đầu từ đây
+      theme: AppTheme.ebonyTheme,
+      home: const Initializer(),
     );
   }
 }
@@ -61,7 +64,6 @@ class _InitializerState extends State<Initializer> {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Hiển thị SplashScreen đầu tiên khi bật app
     if (_showSplash) {
       return SplashScreen(
         onFinish: () {
@@ -72,76 +74,35 @@ class _InitializerState extends State<Initializer> {
       );
     }
 
-    // 2. Sau khi Splash kết thúc, Listen Firebase Auth State Changes
-    // Nếu có User (Firebase) -> Kiểm tra role: admin -> AdminDashboardScreen, customer -> MainScreen
-    // Nếu không -> LoginScreen
     return StreamBuilder<User?>(
       stream: _auth.authStateChanges,
       builder: (context, snapshot) {
-        // ⏳ Đang check auth state
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/logo1.png',
-                    width: 100,
-                    errorBuilder: (c, e, s) => const Icon(Icons.chair, size: 100),
-                  ),
-                  const SizedBox(height: 24),
-                  const CircularProgressIndicator(color: Color(0xFFA88860)),
-                  const SizedBox(height: 16),
-                  const Text('Đang khởi động...', style: TextStyle(color: Colors.grey, fontSize: 14)),
-                ],
-              ),
-            ),
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator(color: Color(0xFFA88860))),
           );
         }
 
-        // ✅ Nếu có User -> Kiểm tra role từ Firestore
         if (snapshot.hasData && snapshot.data != null) {
           return FutureBuilder<String?>(
             future: _auth.getUserRole(snapshot.data!.uid),
             builder: (context, roleSnapshot) {
-              // Đang tải role
               if (roleSnapshot.connectionState == ConnectionState.waiting) {
-                return Scaffold(
-                  backgroundColor: Colors.white,
-                  body: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/logo1.png',
-                          width: 100,
-                          errorBuilder: (c, e, s) => const Icon(Icons.chair, size: 100),
-                        ),
-                        const SizedBox(height: 24),
-                        const CircularProgressIndicator(color: Color(0xFFA88860)),
-                      ],
-                    ),
-                  ),
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator(color: Color(0xFFA88860))),
                 );
               }
 
               final role = roleSnapshot.data ?? 'customer';
-
-              // Nếu admin -> AdminDashboardScreen
               if (role == 'admin') {
                 return const AdminDashboardScreen();
               }
-
-              // Nếu customer hoặc không có role -> MainScreen
               return const MainScreen();
             },
           );
         }
 
-        // ❌ Nếu không có User -> LoginScreen
-        return LoginScreen();
+        return const LoginScreen();
       },
     );
   }

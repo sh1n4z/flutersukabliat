@@ -7,6 +7,8 @@ class Product {
   final String category;
   final List<dynamic> colors; // Danh sách màu sắc từ Firebase
   final List<dynamic> sizes; // Danh sách kích cỡ từ Firebase
+  final double rating; // Đánh giá sao (React: rating)
+  final int reviews; // Số lượng đánh giá (React: reviews)
 
   Product({
     required this.id,
@@ -17,6 +19,8 @@ class Product {
     required this.category,
     this.colors = const [],
     this.sizes = const [],
+    this.rating = 0.0,
+    this.reviews = 0,
   });
 
   // Giúp lấy nhanh 1 tấm ảnh đại diện
@@ -51,6 +55,8 @@ class Product {
       images: imgs,
       colors: colors,
       sizes: sizes,
+      rating: (m['rating'] ?? 0).toDouble(),
+      reviews: (m['reviews'] ?? 0).toInt(),
     );
   }
 
@@ -62,5 +68,7 @@ class Product {
     'category': category,
     'colors': colors,
     'sizes': sizes,
+    'rating': rating,
+    'reviews': reviews,
   };
 }

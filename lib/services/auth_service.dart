@@ -38,38 +38,42 @@ class AuthService {
     return await _auth.signInWithEmailAndPassword(email: email, password: password);
   }
 
-  // Đăng ký tài khoản mới + tự động tạo user document
+  // Đăng ký tài khoản mới + tự động tạo user document phân quyền
   Future<UserCredential> signUp(String email, String password, {String? name}) async {
     try {
+      // 1. Tạo tài khoản Firebase Auth
       final userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       final uid = userCredential.user!.uid;
-      
-      // Xác định role dựa trên email
+
+      // 2. Phân quyền tự động: nếu là người của công ty thì làm admin, còn lại là customer
       String role = 'customer';
       if (email.endsWith('@ebony.com') || email == 'admin@ebony.com') {
         role = 'admin';
       }
 
-      // Tạo user document trong Firestore
-      await _firestore.collection('users').doc(uid).set(
-        {
-          'email': email,
-          'name': name ?? email.split('@')[0],
-          'phone': '',
-          'role': role,
-          'createdAt': FieldValue.serverTimestamp(),
-          'updatedAt': FieldValue.serverTimestamp(),
-        },
-        SetOptions(merge: false),
-      );
+      // 3. Đẩy thông tin đầy đủ lên collection 'users'
+      await _firestore.collection('users').doc(uid).set({
+        'uid': uid,
+        'email': email,
+        'name': name ?? email.split('@')[0],
+        'phone': '',
+        'role': role,
+        'avatarUrl': '',
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
 
       return userCredential;
+    } on FirebaseAuthException catch (e) {
+      print("Lỗi Firebase Auth: ${e.message}");
+      rethrow;
     } catch (e) {
-      throw Exception('Lỗi đăng ký: ${e.toString()}');
+      print("Lỗi đăng ký và lưu user: $e");
+      rethrow;
     }
   }
 

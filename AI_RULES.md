@@ -22,3 +22,12 @@
 - **Xác nhận Model:** Chỉ cung cấp code Model mới khi có sự thay đổi cấu trúc Database trên Firebase Console.
 - **Xử lý lỗi:** Gọi Firebase luôn trong `try-catch` và hiển thị `SnackBar` chuẩn Ebony.
 - **Tránh trùng lặp:** Không gửi lại toàn bộ mã nguồn của một file nếu chỉ thay đổi một đoạn nhỏ (ưu tiên giải thích hoặc sửa đúng chỗ).
+## Quy tắc Cấu trúc Thư mục (Directory Structure)
+* Code theo chuẩn Feature-first / Screen-first. Tính năng nào hiển thị ở màn hình nào thì BẮT BUỘC phải đặt file code (.dart) vào trong thư mục của màn hình đó.
+* Ví dụ: Tính năng Search (Tìm kiếm) nằm ở Home thì đặt tại `lib/screens/home/` hoặc `lib/screens/home/widgets/`.
+* Tuyệt đối KHÔNG vứt file tính năng riêng lẻ ra ngoài thư mục gốc `screens` hoặc nhét bừa vào thư mục `widgets` chung.
+
+## Quy tắc Quản lý Database & Collection
+* TUYỆT ĐỐI KHÔNG tự ý sinh thêm Collection mới trên Firestore mà không báo cáo.
+* Nếu tính năng mới cần đọc/ghi vào một Collection chưa từng có, BẮT BUỘC phải dừng lại, báo cáo tên Collection và cấu trúc Document (các fields) để xin phép trước khi code.
+* Không được dùng fake data (dữ liệu giả) bọc cứng trong UI, mọi dữ liệu động phải gọi qua Firebase.

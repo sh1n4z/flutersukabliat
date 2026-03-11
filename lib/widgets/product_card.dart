@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../models/product.dart';
 import '../theme/app_colors.dart';
 import '../providers/cart_provider.dart';
@@ -93,7 +94,7 @@ class ProductCard extends StatelessWidget {
                       const Icon(Icons.star, size: 14, color: AppColors.woodAccent),
                       const SizedBox(height: 8),
                       Text(
-                        "\$${product.price.toStringAsFixed(0)}",
+                        NumberFormat.currency(locale: 'vi_VN', symbol: 'đ', decimalDigits: 0).format(product.price),
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w900,
